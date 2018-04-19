@@ -1,3 +1,5 @@
+//+build !test
+
 /*
  * State Server API
  * Copyright (C) 2018  Ritchie Borja
@@ -20,20 +22,24 @@
 package main
 
 import (
-	"net/http"
 	"log"
+	"net/http"
 
-	"strconv"
 	"encoding/json"
+	"strconv"
+	"os"
 )
 
+// The internal memory of the loaded states
 var states States
 
+// ErrorResponse is the response HTTP format if an error occurs
 type ErrorResponse struct {
 	Error string
 }
 
-func handler(w http.ResponseWriter, r *http.Request) {
+// StateByLocation is an HTTP request that retrieves a list of states given a longitude and a latitude in POST form
+func StateByLocation(w http.ResponseWriter, r *http.Request) {
 	writer := json.NewEncoder(w)
 
 	longitude, err1 := strconv.ParseFloat(r.FormValue("longitude"), 64)
@@ -65,15 +71,23 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	writer.Encode(searchedStates)
 }
 
+// RunStateServer runs the web server
 func RunStateServer() {
-	http.HandleFunc("/", handler)
+	http.HandleFunc("/", StateByLocation)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
+// The starting point of this state-server program
 func main() {
-	stateDescriptions, err := StateDescriptions("states.json")
+	filename := "states.json"
+
+	if len(os.Args) > 1 {
+		filename = os.Args[1]
+	}
+
+	stateDescriptions, err := StateDescriptions(filename)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	states = Initialize(stateDescriptions)

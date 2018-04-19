@@ -20,9 +20,9 @@
 package main
 
 import (
-	"testing"
-	"github.com/stretchr/testify/assert"
 	"fmt"
+	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 // New Jersey, Hawaii, Alaska, Rhode Island, Delaware, Connecticut
@@ -56,7 +56,7 @@ func TestInitializeCorrectFile(t *testing.T) {
 	}
 
 	// Let's check if there are exactly all 50 states but the excluded states stated above in the file
-	assert.Len(t, states, 50 - len(statesNotToConsider))
+	assert.Len(t, states, 50-len(statesNotToConsider))
 }
 
 // In this test, we'll have to assume that the points of the given border in the
@@ -100,4 +100,9 @@ func TestToCheckNoHorizontalLines(t *testing.T) {
 			assert.NotEqual(t, y1, y2)
 		}
 	}
+}
+
+func TestNoSuchFile(t *testing.T) {
+	_, err := StateDescriptions("states-dummy.json")
+	assert.Error(t, err)
 }

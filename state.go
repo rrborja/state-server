@@ -20,39 +20,49 @@
 package main
 
 import (
-	"io/ioutil"
 	"encoding/json"
+	"io/ioutil"
 )
 
+// Point that represents X and Y coordinates
 type Point struct {
 	X float64
 	Y float64
 }
 
+// Line segment of two points that represents as the border
 type Line struct {
 	P1 Point
 	P2 Point
 }
 
+// Polygon is a group of connected lines and is assumed as Closed Polygon
 type Polygon []Liner
+
+// States is the internal database of all states' polygon representation
 type States map[string]Polygon
 
+// Liner is the interface that retrieves the Point A and Point B of the line
+// which also extends the Caster interface
 type Liner interface {
 	PointA() Point
 	PointB() Point
 	Caster
 }
 
+// Caster is the interface that checks whether a given point intersects a
+// given line
 type Caster interface {
 	DoIntersect(Point) bool
 }
 
+// StateDescription is the struct for each element in the states.json file
 type StateDescription struct {
-	State string		`json:"state"`
-	Border [][]float64	`json:"border"`
+	State  string      `json:"state"`
+	Border [][]float64 `json:"border"`
 }
 
-// Load the state configuration file containing all U.S. states' names
+// StateDescriptions loads the state configuration file containing all U.S. states' names
 // and the geometric representation of the corresponding state
 func StateDescriptions(filename string) ([]StateDescription, error) {
 	raw, err := ioutil.ReadFile(filename)
@@ -72,12 +82,12 @@ func Initialize(stateDescriptions []StateDescription) States {
 	states := make(States, len(stateDescriptions))
 
 	for _, stateDescription := range stateDescriptions {
-		polygon := make(Polygon, len(stateDescription.Border) - 1)
+		polygon := make(Polygon, len(stateDescription.Border)-1)
 
 		// Scan all the points so that they can be processed as
 		// segments a.k.a. the border. This assumes that all
 		// points are in order
-		for i := 0; i < len(stateDescription.Border) - 1; i++ {
+		for i := 0; i < len(stateDescription.Border)-1; i++ {
 			fpoint1 := stateDescription.Border[i]
 			fpoint2 := stateDescription.Border[i+1]
 

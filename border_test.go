@@ -20,12 +20,12 @@
 package main
 
 import (
-	"testing"
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestIntersectToVerticalLine(t *testing.T) {
-	line := Line{Point{0,8}, Point{0, -8}}
+	line := Line{Point{0, 8}, Point{0, -8}}
 	assert.True(t, line.DoIntersect(Point{-8, 0}))
 }
 
@@ -35,7 +35,7 @@ func TestIntersectToHorizontalLine(t *testing.T) {
 }
 
 func TestIntersectAfterAVerticalLine(t *testing.T) {
-	line := Line{Point{0,8}, Point{0, -8}}
+	line := Line{Point{0, 8}, Point{0, -8}}
 	assert.False(t, line.DoIntersect(Point{8, 0}))
 }
 
@@ -85,7 +85,7 @@ func SampleConvex() Polygon {
 	p4 := Point{9, 0}
 	p5 := Point{-3, 0}
 
-	return []Liner{Line{p1,p2}, Line{p2,p3}, Line{p3,p4}, Line{p4,p5}, Line{p5,p1}}
+	return []Liner{Line{p1, p2}, Line{p2, p3}, Line{p3, p4}, Line{p4, p5}, Line{p5, p1}}
 }
 
 func TestIfPointIsInConvexPolygonExpectingMultipleIntersections(t *testing.T) {

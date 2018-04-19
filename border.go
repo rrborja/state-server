@@ -19,15 +19,17 @@
 
 package main
 
+// PointA is the Point A of the line
 func (line Line) PointA() Point {
 	return line.P1
 }
 
+// PointB is the Point B of the line
 func (line Line) PointB() Point {
 	return line.P2
 }
 
-// Checks whether a given point ray casts to the right in a straight line towards the given line
+// DoIntersect checks whether a given point ray casts to the right in a straight line towards the given line
 func (line Line) DoIntersect(p Point) bool {
 	a := line.P1
 	b := line.P2
@@ -35,7 +37,7 @@ func (line Line) DoIntersect(p Point) bool {
 		p.X < (b.X-a.X)*(p.Y-a.Y)/(b.Y-a.Y)+a.X
 }
 
-// A simple ray casting algorithm that checks all borders may be intersected. It counts how many
+// Within is a simple ray casting algorithm that checks all borders may be intersected. It counts how many
 // times borders are intersected. If there are even times that have been intersected, then the
 // point in question is said to be inside the polygon. Otherwise, it is outside the polygon.
 func (polygon Polygon) Within(point Point) (i bool) {
@@ -46,4 +48,3 @@ func (polygon Polygon) Within(point Point) (i bool) {
 	}
 	return
 }
-
